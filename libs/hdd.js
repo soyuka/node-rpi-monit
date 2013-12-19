@@ -1,7 +1,7 @@
 var exec = require('exec')
   , _ = require('underscore');
 
-var df = require('node-diskfree');
+var df = require('../core/diskfree');
 
 module.exports = function(cb) {
 

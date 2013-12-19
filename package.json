@@ -1,7 +1,6 @@
 {
-  "name": "application-name",
-  "version": "0.0.1",
-  "private": true,
+  "name": "node-rpi-monit",
+  "version": "0.0.2",
   "scripts": {
     "start": "node app.js"
   },
@@ -13,7 +12,6 @@
     "async": "~0.2.9",
     "underscore": "~1.5.2",
     "pretty-seconds": "~0.1.1",
-    "node-diskfree": "~0.1.0",
     "numeral": "~1.5.2"
   }
 }
