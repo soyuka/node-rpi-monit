@@ -6,11 +6,25 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-
+var winston = require('winston');
 var app = express();
 
 //Global logger, could be extended
-global.logger = require('winston');
+global.logger = new (winston.Logger)(
+	{
+		transports: [
+    		new (winston.transports.Console)({colorize: true})
+    		//      new (winston.transports.File)({ filename: 'somefile.log' })
+    	]
+	}
+);
+
+// global.logger.addColors(
+// 	{
+// 		info: ''
+// 	}
+// );
+
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -30,6 +44,10 @@ if ('development' == app.get('env')) {
 }
 
 require('./routes')(app);
+
+var libs = require('./libs').init(function(err, librairies) {
+	console.log(librairies);
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

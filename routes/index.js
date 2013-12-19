@@ -4,9 +4,12 @@
 
 var routes = {
 	index : function(req, res) {
-		require('../libs')(function(err, libs) {
-			res.render('index', {libs : libs});
-		});
+
+
+
+		res.render('index', {libs : {}});
+
+
 	}
 }
 

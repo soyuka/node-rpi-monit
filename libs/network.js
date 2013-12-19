@@ -1,9 +1,12 @@
-var os = require('os')
-  , numeral = require('numeral');
+var exec = os = require('os');
 
-module.exports = function(cb) {
-	var interfaces = os.networkInterfaces();
-	
-	cb(null, { eth0 : interfaces.eth0[0].address });
+module.exports = {
+	name: 'Network',
+	fetch: function(cb) {
+		this.logger.info("Fetching", this.name);
+
+		this.attributes = os.networkInterfaces();
+
+		return typeof cb === 'function' ? cb(null, this.attributes) : '';
+	}
 }
-

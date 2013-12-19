@@ -1,24 +1,59 @@
-var fs = require('fs'), _ = require('underscore'), async = require('async'), path = require('path');
+var fs = require('fs')
+  , _ = require('underscore')
+  , async = require('async')
+  , path = require('path');
 
+var libs = {
+	librairies: [],
+	require: function(lib) {
+		var p = path.join(__dirname, lib);
+		
+		this.librairies.push(
+			_.extend({}, require('../core/lib'), require(p))
+		);
 
-var getLib = function(file, cb) {
-	var p = path.join(__dirname, file);
+		return this;
+	},
+	initAll: function(cb) {
+		var self = this;
 
-	require(p)(function(err, value) {
+		async.each(this.librairies, function(lib, cb) {
+			lib.init(cb);
+		}, function(err) {
+			cb(err, self.get());
+		});
+	},
+	init: function(lib, cb) {
+		
+		cb = typeof lib === 'function' ? lib : cb;
 
-		cb(err, [path.basename(file, '.js'), value]);
-	});
-};
+		if(typeof lib === 'string') {
+			this.require(lib);
+        } else {
+			var libs = fs.readdirSync(__dirname);
 
-module.exports = function(cb) {
-	var libs = fs.readdirSync(__dirname);
+			libs = _.reject(libs, function(val){ return val === 'index.js'; });
 
-	libs = _.reject(libs, function(val){ return val === 'index.js'; });
+			for(var i in libs)
+				this.require(libs[i]);
+		}
+		this.initAll(cb);
+	},
+	get: function(lib) {
+		if(lib)
+			return this.librairies[lib].attributes;
+		else {
+			var libs = {}, num = this.librairies.length;
 
-	async.map(libs, getLib, function(err, results) {
+			while(num--) {
+				var l = this.librairies[num];
 
-		cb(err, _.object(results));
-	});
+				libs[l.name] = l.attributes;
+			}
 
-	
+			return libs;
+		}
+	}
 }
+
+module.exports = libs;
