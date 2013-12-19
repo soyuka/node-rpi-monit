@@ -20,7 +20,7 @@ var libs = {
 		async.each(this.librairies, function(lib, cb) {
 			lib.init(cb);
 		}, function(err) {
-			cb(err, self.get());
+			cb(err, self.getAttributes());
 		});
 	},
 	init: function(lib, cb) {
@@ -37,9 +37,17 @@ var libs = {
 			for(var i in libs)
 				this.require(libs[i]);
 		}
+
+		// console.log(this.librairies);
+
 		this.initAll(cb);
 	},
 	get: function(lib) {
+		var self = this;
+
+		return lib ? _.filter(self.librairies, function(v) { return v.name.toLowerCase() == lib.toLowerCase(); }) : this.librairies;
+	},
+	getAttributes: function(lib) {
 		if(lib)
 			return this.librairies[lib].attributes;
 		else {

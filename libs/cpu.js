@@ -1,12 +1,22 @@
-var exec = require('exec'), os = require('os'), _ = require('underscore');
+var exec = require('exec')
+  , os = require('os')
+  , _ = require('underscore');
 
-module.exports = {
+
+// console.log(new events());
+//process.exit(0);
+var cpu = {
 	name: 'CPU',
 	update: 10000,
 	fetch: function(cb) {
         this.logger.info("Fetching", this.name);
 
 		var self = this;
+
+		// console.dir(self);
+		// this.addListener('test', function() {
+		// 	self.logger.warn('test');
+		// });
 
 		exec("/opt/vc/bin/vcgencmd measure_temp | grep -o '[0-9\.]*'", function(err, out, code) {
 			
@@ -20,7 +30,12 @@ module.exports = {
 				cpus: os.cpus()
 			};
 
+			// self.emit('test');
+
 			return typeof cb === 'function' ? cb(err, self.attributes) : '';
 		});
 	}
-}
+};
+
+
+module.exports = cpu;

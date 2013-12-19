@@ -1,4 +1,5 @@
-module.exports = {
+
+var lib = {
 	init: function(cb) {
 		var self = this;
 
@@ -18,3 +19,5 @@ module.exports = {
 	interval: null,
 	fetch: function() {}
 };
+
+module.exports = lib;

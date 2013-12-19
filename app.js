@@ -43,12 +43,16 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-require('./routes')(app);
+var libs = require('./libs')
 
-var libs = require('./libs').init(function(err, librairies) {
-	console.log(librairies);
-});
+libs.init(function(err, librairies) {
+	
+	require('./routes')(app, librairies);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+	//console.log(libs.get('cpu'));
+	
+	http.createServer(app).listen(app.get('port'), function(){
+	  	global.logger.info('Express server listening on port ' + app.get('port'));
+	});
+	
 });
