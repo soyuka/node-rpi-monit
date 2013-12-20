@@ -19,13 +19,6 @@ global.logger = new (winston.Logger)(
 	}
 );
 
-// global.logger.addColors(
-// 	{
-// 		info: ''
-// 	}
-// );
-
-
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -49,8 +42,13 @@ libs.init(function(err, librairies) {
 	
 	require('./routes')(app, librairies);
 
-	//console.log(libs.get('cpu'));
-	
+	var cpu = libs.get('cpu');
+
+	cpu.on('cpu:infos', function() {
+		console.log('Receiving infos CPU');
+	});
+
+
 	http.createServer(app).listen(app.get('port'), function(){
 	  	global.logger.info('Express server listening on port ' + app.get('port'));
 	});

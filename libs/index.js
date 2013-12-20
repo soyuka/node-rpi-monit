@@ -45,7 +45,7 @@ var libs = {
 	get: function(lib) {
 		var self = this;
 
-		return lib ? _.filter(self.librairies, function(v) { return v.name.toLowerCase() == lib.toLowerCase(); }) : this.librairies;
+		return lib ? _.filter(self.librairies, function(v) { return v.name.toLowerCase() == lib.toLowerCase(); })[0] : this.librairies;
 	},
 	getAttributes: function(lib) {
 		if(lib)

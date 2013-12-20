@@ -2,7 +2,6 @@ var exec = require('exec')
   , os = require('os')
   , _ = require('underscore');
 
-
 // console.log(new events());
 //process.exit(0);
 var cpu = {
@@ -12,11 +11,6 @@ var cpu = {
         this.logger.info("Fetching", this.name);
 
 		var self = this;
-
-		// console.dir(self);
-		// this.addListener('test', function() {
-		// 	self.logger.warn('test');
-		// });
 
 		exec("/opt/vc/bin/vcgencmd measure_temp | grep -o '[0-9\.]*'", function(err, out, code) {
 			
@@ -30,7 +24,7 @@ var cpu = {
 				cpus: os.cpus()
 			};
 
-			// self.emit('test');
+			self.emit('cpu:infos');
 
 			return typeof cb === 'function' ? cb(err, self.attributes) : '';
 		});

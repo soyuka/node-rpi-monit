@@ -1,3 +1,4 @@
+var _ = require('underscore');
 
 var lib = {
 	init: function(cb) {
@@ -20,4 +21,14 @@ var lib = {
 	fetch: function() {}
 };
 
-module.exports = lib;
+var events = require('events'), util = require('util');
+
+var Eventer = function() {
+	events.EventEmitter.call(this);
+
+	_.extend(this, lib);
+}
+
+util.inherits(Eventer, events.EventEmitter);
+
+module.exports = new Eventer();
