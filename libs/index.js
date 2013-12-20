@@ -3,6 +3,8 @@ var fs = require('fs')
   , async = require('async')
   , path = require('path');
 
+var storage = require('../core/storage');
+
 var libs = {
 	librairies: [],
 	require: function(lib) {
@@ -14,22 +16,48 @@ var libs = {
 
 		return this;
 	},
+	handler: function(event, datas) {
+		var key = this.name.toLowerCase() + ':' + event + ':' + new Date().getTime();
+
+		if(typeof datas === 'object')
+			datas =  JSON.stringify(datas);
+
+		storage.SETEX(key, 3600, datas);
+	},
+	registerEvents: function(lib) {
+		var self = this;
+
+		_.each(lib.events, function(evt) {
+
+			lib.addListener(evt, function() {
+				
+				var args = [evt];
+				Array.prototype.push.apply( args, arguments );
+
+				self.handler.apply(this, args);
+			});
+		});
+
+	},
 	initAll: function(cb) {
 		var self = this;
 
 		async.each(this.librairies, function(lib, cb) {
+			self.registerEvents(lib);
 			lib.init(cb);
 		}, function(err) {
-			cb(err, self.getAttributes());
+			cb(err, self);
 		});
 	},
 	init: function(lib, cb) {
 		
 		cb = typeof lib === 'function' ? lib : cb;
 
-		if(typeof lib === 'string') {
+		if(typeof lib === 'string')
+
 			this.require(lib);
-        } else {
+		
+        else {
 			var libs = fs.readdirSync(__dirname);
 
 			libs = _.reject(libs, function(val){ return val === 'index.js'; });
@@ -38,7 +66,6 @@ var libs = {
 				this.require(libs[i]);
 		}
 
-		// console.log(this.librairies);
 
 		this.initAll(cb);
 	},

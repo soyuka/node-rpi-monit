@@ -5,26 +5,41 @@ var exec = require('exec')
 // console.log(new events());
 //process.exit(0);
 var cpu = {
-	name: 'CPU',
+	name: 'cpu',
+	events: ['temp', 'loadavg'],
 	update: 10000,
+	autoStart: false,
 	fetch: function(cb) {
-        this.logger.info("Fetching", this.name);
+        this.logger.debug("Fetching", this.name);
 
 		var self = this;
 
 		exec("/opt/vc/bin/vcgencmd measure_temp | grep -o '[0-9\.]*'", function(err, out, code) {
 			
-			var temp = out.replace('\n', '');
-				temp += ' °C';
+			var temp = parseFloat(out.replace('\n', ''));
 
 			self.logger.info('Getting processor temp', temp);
 			
-			self.attributes = {
-				temp: temp,
-				cpus: os.cpus()
-			};
+			var avg = os.loadavg(),
+				loadavg = {
+					'1': avg[0],
+					'5': avg[1],
+					'10': avg[2] 
+				};
 
-			self.emit('cpu:infos');
+			if(!self.attributes.length) {
+				self.logger.info('Getting processor load avg', loadavg);
+
+				self.attributes = {
+					temp: temp + ' °C',
+					cpus: os.cpus(),
+					loadavg: loadavg
+				};
+			} else
+				self.attributes = _.extend(self.attributes, {temp: temp + ' °C', loadavg: loadavg});
+
+			self.emit('temp', temp);
+			self.emit('loadavg', avg);
 
 			return typeof cb === 'function' ? cb(err, self.attributes) : '';
 		});

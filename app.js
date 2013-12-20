@@ -9,11 +9,20 @@ var path = require('path');
 var winston = require('winston');
 var app = express();
 
+var _ = require('underscore');
+
+
 //Global logger, could be extended
 global.logger = new (winston.Logger)(
 	{
 		transports: [
-    		new (winston.transports.Console)({colorize: true})
+    		new (winston.transports.Console)(
+    			{
+    				colorize: true, 
+    				levels: _.extend(winston.config.syslog.levels, {debug:7}), 
+    				level: 'debug'
+    			}
+    		)
     		//      new (winston.transports.File)({ filename: 'somefile.log' })
     	]
 	}
@@ -36,18 +45,11 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-var libs = require('./libs')
+var libs = require('./libs');
 
-libs.init(function(err, librairies) {
+libs.init(function(err) {
 	
-	require('./routes')(app, librairies);
-
-	var cpu = libs.get('cpu');
-
-	cpu.on('cpu:infos', function() {
-		console.log('Receiving infos CPU');
-	});
-
+	require('./routes')(app);
 
 	http.createServer(app).listen(app.get('port'), function(){
 	  	global.logger.info('Express server listening on port ' + app.get('port'));

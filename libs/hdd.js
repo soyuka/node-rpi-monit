@@ -4,7 +4,7 @@ var exec = require('exec')
   , numeral = require('numeral');
 
 module.exports = {
-    name: 'HDD',
+    name: 'hdd',
     getCommand: function() {
         switch (os.platform().toLowerCase()) {
             case'darwin':
@@ -36,7 +36,7 @@ module.exports = {
         return map;
     },
     fetch: function(cb) {
-        this.logger.info("Fetching", this.name);
+        this.logger.debug("Fetching", this.name);
 
         var self = this;
 
