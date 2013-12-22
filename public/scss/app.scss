@@ -1,0 +1,64 @@
+@import "settings";
+@import "foundation";
+
+
+// $include-html-panel-classes: $include-html-classes;
+
+// We use these to control the background and border styles
+// $panel-bg: darken(#fff, 5%);
+// $panel-border-style: solid;
+// $panel-border-size: 1px;
+
+// We use this % to control how much we darken things on hover
+// $panel-function-factor: 10%;
+// $panel-border-color: darken($panel-bg, $panel-function-factor);
+
+$yellow: #ECD078;
+$orange: #D95B43;
+$red: #C02942;
+$purple: #542437;
+$blue: #53777A;
+$grey: #CCC4BB;
+
+@mixin panel-color($color) {
+	background: $color;
+	border-color: darken($color, 10%);
+}
+
+.panel {position:relative;}
+
+.panel.yellow {
+	@include panel-color($yellow);
+}
+
+.panel.orange {
+	@include panel-color($orange);
+}
+
+.panel.red {
+	@include panel-color($red);
+}
+
+.panel.purple {
+	@include panel-color($purple);
+}
+
+.panel.blue {
+	@include panel-color($blue);
+}
+
+.panel.grey {
+	@include panel-color($grey);
+}
+
+.panel.orange h5 small {
+	color:#542437;
+}
+
+.chart.memory {
+	position: absolute;
+	right: rem-calc(-40);
+	top: rem-calc(10);
+}
+
+
