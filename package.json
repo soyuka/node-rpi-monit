@@ -12,6 +12,7 @@
     "async": "~0.2.9",
     "underscore": "~1.5.2",
     "pretty-seconds": "~0.1.1",
-    "numeral": "~1.5.2"
+    "numeral": "~1.5.2",
+    "redis": "~0.10.0"
   }
 }
