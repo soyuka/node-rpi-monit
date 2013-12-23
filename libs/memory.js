@@ -12,7 +12,7 @@ module.exports = {
 			
 			_.each(stats.total, function(total, i) {
 				//calcs used memory
-				var used = total - stats.free[i];
+				var used = parseInt(total) - parseInt(stats.free[i]);
 
 				sorted.push({
 					x: parseInt(i),

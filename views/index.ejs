@@ -21,7 +21,7 @@
           
           <p class="right">
             <span class="label">
-              <i class="icon-temperature"></i>43°C
+              <i class="icon-temperature"></i><span id="temp"><%= cpu.temp %></span>
             </span>
             <span class="label secondary">
               <i class="icon-gauge"></i><%= cpu.cpus[0].speed %>
@@ -41,14 +41,14 @@
       <div class="large-6 columns">
         <div class="panel yellow">
           <h5>Hard drives</h5>
-          <ul class="small-block-grid-<%= hdd.length%>">
+          <ul class="small-block-grid-2">
 
             <% for(var i in hdd) { %>
               <li>
                 <div class="chart hdd" data-used="<%= parseFloat(hdd[i].percent) %>">
 
                 </div>
-                <h5><%= i %> <br><small><%= hdd[i].free %> / <%= hdd[i].used %></small></h5>
+                <h5><%= i %> <br><small><%= hdd[i].used %> / <%= hdd[i].available %></small></h5>
               </li>
             <% } %>
           </ul>
@@ -57,7 +57,7 @@
 
       <div class="large-6 columns">
         <div class="panel orange">
-          <h5>Memory <small>231.51 MB / 437.67 MB</small></h5>
+          <h5>Memory <small><span id="memory-used"></span> / <%= memory.total %></small></h5>
           <div class="chart memory" data-used="<%= parseFloat(memory.percent) %>">
           </div>
 
@@ -231,6 +231,9 @@ $(function () {
 
   var getMemoryUsage = function(self) {
     $.get('/stats/memory', function(data) {
+      var used = Math.round( data[data.length - 1].y / 1024 / 1024 * 100) / 100;
+      $("#memory-used").text(used + ' MB');
+
       self.series[0].setData(data);
     }, 'json');
   };
@@ -289,13 +292,19 @@ $(function () {
     series: [{
       type: 'line',
     }]
-  })
+  });
+
+  var uploadTemp = function(temp) {
+    $('#temp').text(temp.y + ' °C');
+  }
 
   var getCPUUsage = function(self) {
      $.get('/stats/cpu', function(data) {
 
-      self.series[0].setData(data.temp);
+      self.series[0].setData(data.temp.data);
       
+      uploadTemp(data.temp.data[data.temp.data.length - 1]);
+
       for(var i in data.loadavg) {
         var n = parseInt(i)+1;
         self.series[n].setData(data.loadavg[i].data);
