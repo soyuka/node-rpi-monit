@@ -27,7 +27,7 @@ var librairie = function(req, res) {
 
 module.exports = function(app){
 	app.get('/', function(req, res) {
-		res.render('index', { libs: {} });
+		res.render('index');
 	});
 
 	app.get('/stats/(:thing)', stats);

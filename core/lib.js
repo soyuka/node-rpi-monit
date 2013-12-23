@@ -25,7 +25,11 @@ var lib = {
 	stop: function() {
 		self.interval.clearInterval();
 	},
+	sort: function(obj, stats) {
+		return stats;
+	},
 	getStats: function(obj, cb) {
+		var self = this;
 
 		if(this.update > 0) {
 
@@ -34,7 +38,9 @@ var lib = {
 				obj = this.name;
 			}
 
-			storage.getStats(obj, cb);
+			storage.getStats(obj, function(err, stats) {
+				cb(err, self.sort(obj, stats));
+			});
 
 		} else {
 			global.logger.error("The librairy " + this.name + " has no stats");

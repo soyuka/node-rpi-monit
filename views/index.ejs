@@ -6,29 +6,6 @@
   </head>
   <body>
 
-  	<% 
-  	var echoRecursive = function(data) {
-	   	for(var i in data) {
-	   		if(typeof data[i] != 'array' && typeof data[i] != 'object') {
-	   		%>
-	   			<li> <%= i %> : <%= data[i]%> </li>
-	   		<%
-	   		} else {
-	   		%>
-	   			<li><%= i %>
-		   			<ul>
-		   			<% echoRecursive(data[i]) %>
-		   			</ul>
-		   		</li>
-	   		<%
-	   		}
-	   	}
-  	}
-  	%>
-
-  	<ul>
-   		<% echoRecursive(libs); %>
-   	</ul>
-
+  
   </body>
 </html>

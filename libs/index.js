@@ -16,8 +16,8 @@ var libs = {
 
 		return this;
 	},
-	handler: function(event, datas) {
-		var key = this.name.toLowerCase() + ':' + event + ':' + new Date().getTime();
+	handler: function(event, datas, time) {
+		var key = this.name.toLowerCase() + ':' + event + ':' + time;
 
 		if(typeof datas === 'object')
 			datas =  JSON.stringify(datas);
