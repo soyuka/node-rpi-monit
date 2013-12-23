@@ -3,8 +3,7 @@ var exec = require('exec')
   , _ = require('underscore')
   , storage = require('../core/storage');
 
-// console.log(new events());
-//process.exit(0);
+
 var cpu = {
 	name: 'cpu',
 	events: ['temp', 'loadavg'],

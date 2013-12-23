@@ -27,8 +27,6 @@ var librairie = function(req, res) {
 
 module.exports = function(app){
 
-	console.log(libs.get('hdd').attributes);
-
 	app.get('/', function(req, res) {
 		res.render('index', { 
 			os: libs.get('os').attributes,

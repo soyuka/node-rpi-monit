@@ -11,17 +11,20 @@ var app = express();
 
 var _ = require('underscore');
 
+var config = require('./config');
+
+var loggerConfiguration = _.extend({
+                    colorize: true, 
+                    levels: _.extend(winston.config.syslog.levels, {debug:7}), 
+                    level: 'debug'
+                }, config.logger);
 
 //Global logger, could be extended
 global.logger = new (winston.Logger)(
 	{
 		transports: [
     		new (winston.transports.Console)(
-    			{
-    				colorize: true, 
-    				levels: _.extend(winston.config.syslog.levels, {debug:7}), 
-    				level: 'debug'
-    			}
+    			loggerConfiguration
     		)
     		//      new (winston.transports.File)({ filename: 'somefile.log' })
     	]

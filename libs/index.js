@@ -5,13 +5,15 @@ var fs = require('fs')
 
 var storage = require('../core/storage');
 
+var config = require('../config');
+
 var libs = {
 	librairies: [],
 	require: function(lib) {
 		var p = path.join(__dirname, lib);
 		
 		this.librairies.push(
-			_.extend({}, require('../core/lib'), require(p))
+			_.extend({}, require('../core/lib'), require(p), config.libs[path.basename(lib, '.js')])
 		);
 
 		return this;
